@@ -10,8 +10,8 @@ if (!process.env.JWT_SECRET) {
   process.exit(1);
 }
 
-// Import all models to ensure relationships are defined
-require('./models');
+// Import models in correct order (parent tables first)
+const { User, UserProfile, WeightHistory, Workout, WorkoutSession, Food, FoodEntry, Goal } = require('./models');
 
 // Import services
 const workoutService = require('./services/workoutService');
@@ -66,18 +66,56 @@ app.use('/api/goals', goalRoutes);
 app.use('/api/statistics', statisticsRoutes);
 app.use(errorHandler);
 
+// Manual sync function for proper table creation order
+async function syncDatabase() {
+  try {
+    // Sync parent tables first (no foreign keys)
+    await User.sync({ force: process.env.NODE_ENV !== 'production' });
+    console.log('✅ User table synchronized');
+    
+    await Food.sync({ force: process.env.NODE_ENV !== 'production' });
+    console.log('✅ Food table synchronized');
+    
+    await Workout.sync({ force: process.env.NODE_ENV !== 'production' });
+    console.log('✅ Workout table synchronized');
+    
+    // Sync child tables (with foreign keys)
+    await UserProfile.sync({ force: process.env.NODE_ENV !== 'production' });
+    console.log('✅ UserProfile table synchronized');
+    
+    await WeightHistory.sync({ force: process.env.NODE_ENV !== 'production' });
+    console.log('✅ WeightHistory table synchronized');
+    
+    await Goal.sync({ force: process.env.NODE_ENV !== 'production' });
+    console.log('✅ Goal table synchronized');
+    
+    await WorkoutSession.sync({ force: process.env.NODE_ENV !== 'production' });
+    console.log('✅ WorkoutSession table synchronized');
+    
+    await FoodEntry.sync({ force: process.env.NODE_ENV !== 'production' });
+    console.log('✅ FoodEntry table synchronized');
+    
+    console.log('✅ All models synchronized successfully');
+  } catch (error) {
+    console.error('❌ Model synchronization error:', error);
+    throw error;
+  }
+}
+
 // Test Sequelize connection and sync tables
 sequelize.authenticate()
   .then(() => {
     console.log('✅ Database connection successful');
-    return sequelize.sync({ force: true });  // Create tables from scratch
+    return syncDatabase();
   })
   .then(() => {
-    console.log('✅ Sequelize models synchronized');
+    console.log('✅ Database tables ready');
     
-    // Initialize default data
-    workoutService.initializeDefaultWorkouts();
-    FoodSeeder.run();
+    // Initialize default data (only in development or if tables are empty)
+    if (process.env.NODE_ENV !== 'production') {
+      workoutService.initializeDefaultWorkouts();
+      FoodSeeder.run();
+    }
     
     const PORT = process.env.PORT || 5000;
     const HOST = process.env.HOST || '0.0.0.0';
