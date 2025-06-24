@@ -108,7 +108,7 @@ sequelize.authenticate()
     console.log('✅ Database connection successful');
     return syncDatabase();
   })
-  .then(() => {
+  .then(async () => {
     console.log('✅ Database tables ready');
     
     // Initialize default data
