@@ -13,14 +13,14 @@ if (!process.env.DATABASE_URL && (!process.env.DB_NAME || !process.env.DB_USER))
 let sequelize;
 
 if (process.env.DATABASE_URL) {
-  // Production: Use Neon connection string
+  // Production: Use Neon connection string with proper SSL
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
     protocol: 'postgres',
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false
+        rejectUnauthorized: false // Important for cloud databases like Neon
       }
     },
     logging: process.env.NODE_ENV === 'development' ? console.log : false,
