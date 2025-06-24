@@ -50,7 +50,7 @@ const Workout = sequelize.define('Workout', {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: 'Users',
+      model: 'users',
       key: 'id'
     },
     comment: 'Null for system templates, userId for custom workouts'

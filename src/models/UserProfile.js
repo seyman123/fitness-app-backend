@@ -6,7 +6,7 @@ const UserProfile = sequelize.define('UserProfile', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Users',
+      model: 'users',
       key: 'id'
     }
   },

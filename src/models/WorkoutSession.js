@@ -11,7 +11,7 @@ const WorkoutSession = sequelize.define('WorkoutSession', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Users',
+      model: 'users',
       key: 'id'
     }
   },
@@ -19,7 +19,7 @@ const WorkoutSession = sequelize.define('WorkoutSession', {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: 'Workouts',
+      model: 'workouts',
       key: 'id'
     },
     comment: 'Reference to workout template, null for custom sessions'

@@ -11,7 +11,7 @@ const FoodEntry = sequelize.define('FoodEntry', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Users',
+      model: 'users',
       key: 'id'
     }
   },
@@ -19,7 +19,7 @@ const FoodEntry = sequelize.define('FoodEntry', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Foods',
+      model: 'foods',
       key: 'id'
     }
   },
