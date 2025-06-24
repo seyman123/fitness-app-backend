@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/config');
 
 const protect = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -11,7 +10,7 @@ const protect = (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, config.jwt.secret);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded; // req.user → { id, email }
     req.userId = decoded.id; // Add userId for backward compatibility
     next();

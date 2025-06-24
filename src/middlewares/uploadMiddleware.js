@@ -1,10 +1,9 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const config = require('../config/config');
 
 // Ensure upload directory exists
-const uploadDir = path.join(__dirname, '../../', config.upload.uploadDir);
+const uploadDir = path.join(__dirname, '../../', process.env.UPLOAD_DIR || 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
   console.log(`Upload directory created: ${uploadDir}`);
@@ -65,7 +64,7 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: config.upload.maxFileSize, // 5MB default
+    fileSize: process.env.MAX_FILE_SIZE || 5242880, // 5MB default
     files: 1, // Single file upload
   }
 });

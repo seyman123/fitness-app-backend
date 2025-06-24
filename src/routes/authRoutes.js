@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
 const protect = require('../middlewares/authMiddleware');
-const config = require('../config/config');
 
 // Kullanıcı kayıt
 router.post('/register', async (req, res) => {
@@ -50,8 +49,8 @@ router.post('/register', async (req, res) => {
     // JWT token oluştur
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email },
-      config.jwt.secret,
-      { expiresIn: config.jwt.expiresIn }
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE || '7d' }
     );
 
     res.status(201).json({
@@ -88,8 +87,8 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      config.jwt.secret,
-      { expiresIn: config.jwt.expiresIn }
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE || '7d' }
     );
 
     res.json({
@@ -181,8 +180,8 @@ router.post('/social', async (req, res) => {
       // User exists, generate token and login
       const token = jwt.sign(
         { id: user.id, email: user.email },
-        config.jwt.secret,
-        { expiresIn: config.jwt.expiresIn }
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRE || '7d' }
       );
 
       res.json({
@@ -206,8 +205,8 @@ router.post('/social', async (req, res) => {
 
       const token = jwt.sign(
         { id: newUser.id, email: newUser.email },
-        config.jwt.secret,
-        { expiresIn: config.jwt.expiresIn }
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRE || '7d' }
       );
 
       res.status(201).json({

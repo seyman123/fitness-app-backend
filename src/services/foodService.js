@@ -1,11 +1,11 @@
 const axios = require('axios');
-const config = require('../config/config');
+
 const { Food } = require('../models');
 
 class FoodService {
   constructor() {
-    this.apiKey = config.apis.food.key;
-    this.apiUrl = config.apis.food.url;
+    this.apiKey = process.env.FOOD_API_KEY;
+    this.apiUrl = process.env.FOOD_API_URL;
   }
 
   /**

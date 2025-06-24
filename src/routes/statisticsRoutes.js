@@ -1,14 +1,14 @@
-ï»¿const express = require('express');
+const express = require('express');
 const StatisticsService = require('../services/statisticsService');
 const authMiddleware = require('../middlewares/authMiddleware');
-const config = require('../config/config');
+
 
 const router = express.Router();
 
-// Middleware - TÃ¼m routes authentication gerektirir
+// Middleware - Tüm routes authentication gerektirir
 router.use(authMiddleware);
 
-// GET /api/statistics/weekly - HaftalÄ±k istatistikler
+// GET /api/statistics/weekly - Haftalýk istatistikler
 router.get('/weekly', async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
@@ -22,19 +22,19 @@ router.get('/weekly', async (req, res) => {
     res.json({
       success: true,
       data: weeklyStats,
-      message: config.NODE_ENV === 'production' ? 'HaftalÄ±k istatistikler baÅŸarÄ±yla getirildi' : 'Weekly statistics retrieved successfully'
+      message: process.env.NODE_ENV === 'production' ? 'Haftalýk istatistikler baþarýyla getirildi' : 'Weekly statistics retrieved successfully'
     });
   } catch (error) {
     console.error('Weekly statistics error:', error);
     res.status(500).json({
       success: false,
-      message: config.NODE_ENV === 'production' ? 'HaftalÄ±k istatistikler getirilirken hata oluÅŸtu' : 'Error fetching weekly statistics',
-      ...(config.NODE_ENV !== 'production' && { error: error.message })
+      message: process.env.NODE_ENV === 'production' ? 'Haftalýk istatistikler getirilirken hata oluþtu' : 'Error fetching weekly statistics',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
 });
 
-// GET /api/statistics/monthly - AylÄ±k istatistikler
+// GET /api/statistics/monthly - Aylýk istatistikler
 router.get('/monthly', async (req, res) => {
   try {
     const { month, year } = req.query;
@@ -48,14 +48,14 @@ router.get('/monthly', async (req, res) => {
     res.json({
       success: true,
       data: monthlyStats,
-      message: config.NODE_ENV === 'production' ? 'AylÄ±k istatistikler baÅŸarÄ±yla getirildi' : 'Monthly statistics retrieved successfully'
+      message: process.env.NODE_ENV === 'production' ? 'Aylýk istatistikler baþarýyla getirildi' : 'Monthly statistics retrieved successfully'
     });
   } catch (error) {
     console.error('Monthly statistics error:', error);
     res.status(500).json({
       success: false,
-      message: config.NODE_ENV === 'production' ? 'AylÄ±k istatistikler getirilirken hata oluÅŸtu' : 'Error fetching monthly statistics',
-      ...(config.NODE_ENV !== 'production' && { error: error.message })
+      message: process.env.NODE_ENV === 'production' ? 'Aylýk istatistikler getirilirken hata oluþtu' : 'Error fetching monthly statistics',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
 });
@@ -68,19 +68,19 @@ router.get('/progress', async (req, res) => {
     res.json({
       success: true,
       data: progress,
-      message: config.NODE_ENV === 'production' ? 'Hedef ilerlemesi baÅŸarÄ±yla getirildi' : 'Goal progress retrieved successfully'
+      message: process.env.NODE_ENV === 'production' ? 'Hedef ilerlemesi baþarýyla getirildi' : 'Goal progress retrieved successfully'
     });
   } catch (error) {
     console.error('Goal progress error:', error);
     res.status(500).json({
       success: false,
-      message: config.NODE_ENV === 'production' ? 'Hedef ilerlemesi getirilirken hata oluÅŸtu' : 'Error fetching goal progress',
-      ...(config.NODE_ENV !== 'production' && { error: error.message })
+      message: process.env.NODE_ENV === 'production' ? 'Hedef ilerlemesi getirilirken hata oluþtu' : 'Error fetching goal progress',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
 });
 
-// GET /api/statistics/dashboard - Dashboard Ã¶zet verileri
+// GET /api/statistics/dashboard - Dashboard özet verileri
 router.get('/dashboard', async (req, res) => {
   try {
     const [weeklyStats, monthlyStats, goalProgress] = await Promise.all([
@@ -106,14 +106,14 @@ router.get('/dashboard', async (req, res) => {
     res.json({
       success: true,
       data: dashboardData,
-      message: config.NODE_ENV === 'production' ? 'Dashboard verileri baÅŸarÄ±yla getirildi' : 'Dashboard data retrieved successfully'
+      message: process.env.NODE_ENV === 'production' ? 'Dashboard verileri baþarýyla getirildi' : 'Dashboard data retrieved successfully'
     });
   } catch (error) {
     console.error('Dashboard data error:', error);
     res.status(500).json({
       success: false,
-      message: config.NODE_ENV === 'production' ? 'Dashboard verileri getirilirken hata oluÅŸtu' : 'Error fetching dashboard data',
-      ...(config.NODE_ENV !== 'production' && { error: error.message })
+      message: process.env.NODE_ENV === 'production' ? 'Dashboard verileri getirilirken hata oluþtu' : 'Error fetching dashboard data',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
 });
