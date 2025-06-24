@@ -1,0 +1,20 @@
+# Database Configuration
+# Production (Neon): Uncomment and set your Neon connection string
+# DATABASE_URL=postgresql://username:password@ep-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require
+
+# Development (Local PostgreSQL)
+DB_NAME=fitness_app
+DB_USER=postgres
+DB_PASSWORD=
+DB_HOST=localhost
+DB_PORT=5432
+
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# JWT Secret
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+# CORS Origin
+CORS_ORIGIN=http://localhost:8081 
