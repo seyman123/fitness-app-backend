@@ -111,11 +111,11 @@ sequelize.authenticate()
   .then(() => {
     console.log('✅ Database tables ready');
     
-    // Initialize default data (only in development or if tables are empty)
-    if (process.env.NODE_ENV !== 'production') {
-      workoutService.initializeDefaultWorkouts();
-      FoodSeeder.run();
-    }
+    // Initialize default data
+    console.log('🌱 Initializing seed data...');
+    await workoutService.initializeDefaultWorkouts();
+    await FoodSeeder.run();
+    console.log('✅ Seed data initialized');
     
     const PORT = process.env.PORT || 5000;
     const HOST = process.env.HOST || '0.0.0.0';
