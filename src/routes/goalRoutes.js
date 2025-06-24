@@ -5,10 +5,10 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-// Middleware - Tüm routes authentication gerektirir
+// Middleware - TÃ¼m routes authentication gerektirir
 router.use(authMiddleware);
 
-// GET /api/goals - Kullanýcýnýn tüm hedeflerini getir
+// GET /api/goals - KullanÄ±cÄ±nÄ±n tÃ¼m hedeflerini getir
 router.get('/', async (req, res) => {
   try {
     const goals = await Goal.findAll({
@@ -25,19 +25,19 @@ router.get('/', async (req, res) => {
     res.json({
       success: true,
       data: goals,
-      message: process.env.NODE_ENV === 'production' ? 'Hedefler baþarýyla getirildi' : 'Goals retrieved successfully'
+      message: process.env.NODE_ENV === 'production' ? 'Hedefler baÅŸarÄ±yla getirildi' : 'Goals retrieved successfully'
     });
   } catch (error) {
     console.error('Goals fetch error:', error);
     res.status(500).json({
       success: false,
-      message: process.env.NODE_ENV === 'production' ? 'Hedefler getirilirken hata oluþtu' : 'Error fetching goals',
+      message: process.env.NODE_ENV === 'production' ? 'Hedefler getirilirken hata oluÅŸtu' : 'Error fetching goals',
       ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
 });
 
-// POST /api/goals - Yeni hedef oluþtur
+// POST /api/goals - Yeni hedef oluÅŸtur
 router.post('/', async (req, res) => {
   try {
     const {
@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
       notes
     } = req.body;
 
-    // Mevcut aktif hedefleri pasif hale getir (her kullanýcýda tek aktif hedef)
+    // Mevcut aktif hedefleri pasif hale getir (her kullanÄ±cÄ±da tek aktif hedef)
     await Goal.update(
       { isActive: false },
       { 
@@ -64,7 +64,7 @@ router.post('/', async (req, res) => {
       }
     );
 
-    // Yeni hedef oluþtur
+    // Yeni hedef oluÅŸtur
     const goal = await Goal.create({
       userId: req.userId,
       dailyCalorieGoal,
@@ -90,19 +90,19 @@ router.post('/', async (req, res) => {
     res.status(201).json({
       success: true,
       data: createdGoal,
-      message: process.env.NODE_ENV === 'production' ? 'Hedef baþarýyla oluþturuldu' : 'Goal created successfully'
+      message: process.env.NODE_ENV === 'production' ? 'Hedef baÅŸarÄ±yla oluÅŸturuldu' : 'Goal created successfully'
     });
   } catch (error) {
     console.error('Goal creation error:', error);
     res.status(400).json({
       success: false,
-      message: process.env.NODE_ENV === 'production' ? 'Hedef oluþturulurken hata oluþtu' : 'Error creating goal',
+      message: process.env.NODE_ENV === 'production' ? 'Hedef oluÅŸturulurken hata oluÅŸtu' : 'Error creating goal',
       ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
 });
 
-// GET /api/goals/active/current - Kullanýcýnýn aktif hedefini getir
+// GET /api/goals/active/current - KullanÄ±cÄ±nÄ±n aktif hedefini getir
 router.get('/active/current', async (req, res) => {
   try {
     const activeGoal = await Goal.findOne({
@@ -120,26 +120,26 @@ router.get('/active/current', async (req, res) => {
     if (!activeGoal) {
       return res.status(404).json({
         success: false,
-        message: process.env.NODE_ENV === 'production' ? 'Aktif hedef bulunamadý' : 'No active goal found'
+        message: process.env.NODE_ENV === 'production' ? 'Aktif hedef bulunamadÄ±' : 'No active goal found'
       });
     }
 
     res.json({
       success: true,
       data: activeGoal,
-      message: process.env.NODE_ENV === 'production' ? 'Aktif hedef baþarýyla getirildi' : 'Active goal retrieved successfully'
+      message: process.env.NODE_ENV === 'production' ? 'Aktif hedef baÅŸarÄ±yla getirildi' : 'Active goal retrieved successfully'
     });
   } catch (error) {
     console.error('Active goal fetch error:', error);
     res.status(500).json({
       success: false,
-      message: process.env.NODE_ENV === 'production' ? 'Aktif hedef getirilirken hata oluþtu' : 'Error fetching active goal',
+      message: process.env.NODE_ENV === 'production' ? 'Aktif hedef getirilirken hata oluÅŸtu' : 'Error fetching active goal',
       ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
 });
 
-// PUT /api/goals/:id - Hedefi güncelle
+// PUT /api/goals/:id - Hedefi gÃ¼ncelle
 router.put('/:id', async (req, res) => {
   try {
     const {
@@ -166,7 +166,7 @@ router.put('/:id', async (req, res) => {
     if (!goal) {
       return res.status(404).json({
         success: false,
-        message: process.env.NODE_ENV === 'production' ? 'Hedef bulunamadý' : 'Goal not found'
+        message: process.env.NODE_ENV === 'production' ? 'Hedef bulunamadÄ±' : 'Goal not found'
       });
     }
 
@@ -194,13 +194,13 @@ router.put('/:id', async (req, res) => {
     res.json({
       success: true,
       data: updatedGoal,
-      message: process.env.NODE_ENV === 'production' ? 'Hedef baþarýyla güncellendi' : 'Goal updated successfully'
+      message: process.env.NODE_ENV === 'production' ? 'Hedef baÅŸarÄ±yla gÃ¼ncellendi' : 'Goal updated successfully'
     });
   } catch (error) {
     console.error('Goal update error:', error);
     res.status(400).json({
       success: false,
-      message: process.env.NODE_ENV === 'production' ? 'Hedef güncellenirken hata oluþtu' : 'Error updating goal',
+      message: process.env.NODE_ENV === 'production' ? 'Hedef gÃ¼ncellenirken hata oluÅŸtu' : 'Error updating goal',
       ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
@@ -219,7 +219,7 @@ router.delete('/:id', async (req, res) => {
     if (!goal) {
       return res.status(404).json({
         success: false,
-        message: process.env.NODE_ENV === 'production' ? 'Hedef bulunamadý' : 'Goal not found'
+        message: process.env.NODE_ENV === 'production' ? 'Hedef bulunamadÄ±' : 'Goal not found'
       });
     }
 
@@ -227,13 +227,13 @@ router.delete('/:id', async (req, res) => {
 
     res.json({
       success: true,
-      message: process.env.NODE_ENV === 'production' ? 'Hedef baþarýyla silindi' : 'Goal deleted successfully'
+      message: process.env.NODE_ENV === 'production' ? 'Hedef baÅŸarÄ±yla silindi' : 'Goal deleted successfully'
     });
   } catch (error) {
     console.error('Goal deletion error:', error);
     res.status(500).json({
       success: false,
-      message: process.env.NODE_ENV === 'production' ? 'Hedef silinirken hata oluþtu' : 'Error deleting goal',
+      message: process.env.NODE_ENV === 'production' ? 'Hedef silinirken hata oluÅŸtu' : 'Error deleting goal',
       ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
