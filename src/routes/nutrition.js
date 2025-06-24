@@ -270,16 +270,15 @@ router.post('/entries', protect, async (req, res) => {
     const entryDate = date || (consumedAt ? new Date(consumedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
     const entryMeal = mealType || meal || 'breakfast';
 
-    // Calculate nutrition values based on quantity
-    // For popular foods, quantity represents servings, not grams
-    // food.servingSize is typically 100g, and food.calories is per 100g
-    const servingMultiplier = quantity; // quantity is now the number of servings
+    // Calculate nutrition values based on quantity (in grams)
+    // Frontend sends quantity in grams, food.calories is per servingSize (usually 100g)
+    const servingMultiplier = quantity / (food.servingSize || 100);
     
     const entry = await FoodEntry.create({
       userId: req.user.id,
       foodId: foodId || null,
       quantity,
-      unit: unit || 'serving',
+      unit: unit || 'grams',
       meal: entryMeal,
       date: entryDate,
       notes,
@@ -347,8 +346,8 @@ router.put('/entries/:id', protect, async (req, res) => {
     };
 
     if (quantity !== undefined && quantity !== entry.quantity) {
-      // For consistency with POST route, quantity represents servings
-      const servingMultiplier = quantity;
+      // For consistency with POST route, quantity is in grams
+      const servingMultiplier = quantity / (entry.Food.servingSize || 100);
       updateData.totalCalories = Math.round(entry.Food.calories * servingMultiplier);
       updateData.totalProtein = Math.round(entry.Food.protein * servingMultiplier * 10) / 10;
       updateData.totalCarbs = Math.round(entry.Food.carbs * servingMultiplier * 10) / 10;
